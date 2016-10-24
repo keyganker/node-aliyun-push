@@ -19,9 +19,8 @@
     "README.md"
   ],
   "keywords": [
-    "共启",
-    "短信",
-    "通讯"
+    "阿里推送",
+    "APP推送"
   ],
   "author": "CFP",
   "license": "MIT",
@@ -42,6 +41,8 @@
   },
   "dependencies": {
     "error": "^7.0.2",
+    "lodash": "^4.16.4",
+    "moment": "^2.15.2",
     "request": "^2.72.0"
   }
 }

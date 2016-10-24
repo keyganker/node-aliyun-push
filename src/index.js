@@ -1,8 +1,20 @@
 import request from 'request';
 import moment from 'moment';
+import TypedError from 'error/typed';
 import _ from 'lodash';
 
 import {sign, uniqId} from './util';
+
+const ClientError = new TypedError({
+  type: 'client',
+  message: '{title}, statusCode={statusCode} statusMessage={statusMessage}',
+  title: null,
+  statusCode: null,
+  statusMessage: null
+});
+
+const ERROR_NULL_RESPONSE = 601;
+const ERROR_PARAMATERS = 601;
 
 class AliYunPush {
   constructor({
@@ -20,6 +32,28 @@ class AliYunPush {
     signatureMethod = 'HMAC-SHA1',
     signatureVersion = '1.0'
   }) {
+    if (typeof accessKeyId === 'undefined') {
+      throw new ClientError({
+        title: 'Call aliyun push error. ',
+        statusCode: ERROR_PARAMATERS,
+        statusMessage: 'param accessKeyId is undefined'
+      });
+    }
+    if (typeof accessKeySecret === 'undefined') {
+      throw new ClientError({
+        title: 'Call aliyun push error. ',
+        statusCode: ERROR_PARAMATERS,
+        statusMessage: 'param accessKeySecret is undefined'
+      });
+    }
+    if (typeof appKey === 'undefined') {
+      throw new ClientError({
+        title: 'Call aliyun push error. ',
+        statusCode: ERROR_PARAMATERS,
+        statusMessage: 'param appKey is undefined'
+      });
+    }
+
     this._debug = debug;
     this._logger = logger;
     this._accessKeySecret = accessKeySecret;
@@ -46,13 +80,13 @@ class AliYunPush {
     type,
     deviceType,
     title,
-    message,
+    content,
     payload,
-    expireTimeout = 3600*12
+    expireTimeout = 3600 * 12
   }) {
     let params = this._params;
     const timeStamp = `${moment((new Date()).getTime()).utc().format('YYYY-MM-DDTHH:mm:ss')}Z`;
-    const expireTime = `${moment((new Date()).getTime()+expireTimeout * 1000).utc().format('YYYY-MM-DDTHH:mm:ss')}Z`;
+    const expireTime = `${moment((new Date()).getTime() + expireTimeout * 1000).utc().format('YYYY-MM-DDTHH:mm:ss')}Z`;
     params = _.extend(params, {
       Action: 'Push',
       Target: target,
@@ -60,7 +94,7 @@ class AliYunPush {
       Type: type,
       DeviceType: deviceType,
       Title: title,
-      Body: message,
+      Body: content,
       AndroidExtParameters: JSON.stringify(payload),
       StoreOffLine: true,
       ExpireTime: expireTime,
@@ -78,15 +112,33 @@ class AliYunPush {
         form: params
       }, (err, message, body) => {
         if (err) {
-          this._logger(`Call aliyun push failed. code[${err.code}] err[${err.message}]`);
           reject(err);
           return;
         }
-
-        console.log(body);
         if (!body) {
+          reject(new ClientError({
+            title: 'Call aliyun push error.',
+            statusCode: message.statusCode,
+            statusMessage: message.statusMessage
+          }));
+          return;
         }
-        resolve(body)
+
+        let data = JSON.parse(body);
+        if (!data) {
+          reject(new ClientError({
+            title: 'Call aliyun push error.',
+            statusCode: ERROR_NULL_RESPONSE,
+            statusMessage: 'response body is null'
+          }));
+        }
+
+        data = _.extend(data, {
+          deviceTokens: targetValue,
+          message: content,
+          payload
+        });
+        resolve(data)
       });
     });
   }
