@@ -138,7 +138,7 @@ class AliYunPush {
           message: content,
           payload
         });
-        resolve(data)
+        resolve(data);
       });
     });
   }

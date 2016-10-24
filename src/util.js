@@ -7,7 +7,7 @@ function popEscape(clearString) {
     .replace(/\'/gi, '%27')
     .replace(/\(/gi, '%28')
     .replace(/\)/gi, '%29')
-    .replace(/\*/gi, '%2A')
+    .replace(/\*/gi, '%2A');
   return clearString;
 }
 
@@ -29,12 +29,12 @@ function hmac(key, string, digest, fn) {
 }
 
 export function sign(method, params, accessKeySecret) {
-  let canonicalizedQueryString = Object.keys(params).sort().map((value) => {
+  const canonicalizedQueryString = Object.keys(params).sort().map((value) => {
     return `${value}=${popEscape(params[value])}`;
   }).join('&');
 
   const stringToSign = `${method}&%2F&${popEscape(canonicalizedQueryString)}`;
-  return hmac(accessKeySecret + '&', stringToSign, 'base64', 'sha1');
+  return hmac(`${accessKeySecret}&`, stringToSign, 'base64', 'sha1');
 }
 
 function getRandom(min, max) {
