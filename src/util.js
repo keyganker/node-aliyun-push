@@ -36,3 +36,13 @@ export function sign(method, params, accessKeySecret) {
   const stringToSign = `${method}&%2F&${popEscape(canonicalizedQueryString)}`;
   return hmac(accessKeySecret + '&', stringToSign, 'base64', 'sha1');
 }
+
+function getRandom(min, max) {
+  const range = max - min;
+  const rand = Math.random();
+  return min + Math.round(rand * range);
+}
+
+export function uniqId() {
+  return `${Date.now()}${getRandom(100, 999)}`;
+}

@@ -1,19 +1,29 @@
-import {sign} from '../util';
+import AliPush from '../index';
 
-const method = 'GET';
-const params = {
-  Format: 'XML',
-  AccessKeyId: 'testid',
-  Action: 'GetDeviceInfos',
-  SignatureMethod: 'HMAC-SHA1',
-  RegionId: 'cn-hangzhou',
-  Devices: 'e2ba19de97604f55b165576736477b74,92a1da34bdfd4c9692714917ce22d53d',
-  SignatureNonce: 'c4f5f0de-b3ff-4528-8a89-fa478bda8d80',
-  SignatureVersion: '1.0',
-  Version: '2015-08-27',
-  AppKey: '23267207',
-  Timestamp: '2016-03-29T03:59:24Z'
-};
-const accessKeySecret = 'testsecret';
+const aliPush = new AliPush({
+  baseUrl: 'http://cloudpush.aliyuncs.com',
+  accessKeyId: 'LTAIv4YM8TX617tc',
+  accessKeySecret: 'bW0NGYa56iLvxgAwsxIOfwKA6WmhaI',
+  signatureMethod: 'HMAC-SHA1',
+  format: 'JSON',
+  regionId: 'cn-hangzhou',
+  signatureVersion: '1.0',
+  version: '2015-08-27',
+  appKey: '23478581',
+  proxy: 'http://10.21.212.60:3128'
+});
 
-console.log(sign(method, params, accessKeySecret));
+aliPush.push({
+  target: 'device',
+  targetValue: '6379df9d555d4edb90a21f1a00a042a4',
+  type: 1,
+  deviceType: 1,
+  title: '财富派',
+  message: '你有一个红包可领取!',
+  payload: {id: 1, name: 'xuejian'}
+}).then(() => {
+  console.log('ok');
+}).catch((e) => {
+  console.log('error');
+  console.log(e);
+});
