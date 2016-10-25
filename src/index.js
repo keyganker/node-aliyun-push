@@ -84,7 +84,8 @@ class AliYunPush {
     payload,
     expireTimeout = 3600 * 12
   }) {
-    let params = this._params;
+    let params = {};
+    _.assign(params, this._params);
     const timeStamp = `${moment((new Date()).getTime()).utc().format('YYYY-MM-DDTHH:mm:ss')}Z`;
     const expireTime = `${moment((new Date()).getTime() + expireTimeout * 1000).utc().format('YYYY-MM-DDTHH:mm:ss')}Z`;
     params = _.extend(params, {
