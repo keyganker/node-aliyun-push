@@ -14,7 +14,7 @@ const ClientError = new TypedError({
 });
 
 const ERROR_NULL_RESPONSE = 601;
-const ERROR_PARAMATERS = 601;
+const ERROR_PARAMATERS = 602;
 
 class AliYunPush {
   constructor({
