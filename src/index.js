@@ -82,6 +82,7 @@ class AliYunPush {
     title,
     content,
     payload,
+    xiaomiActivity,
     expireTimeout = 3600 * 12
   }) {
     let params = {};
@@ -96,6 +97,7 @@ class AliYunPush {
       DeviceType: deviceType,
       Title: title,
       Body: content,
+      XiaomiActivity: xiaomiActivity,
       AndroidExtParameters: JSON.stringify(payload),
       StoreOffLine: true,
       ExpireTime: expireTime,
