@@ -99,7 +99,7 @@ class AliYunPush {
       Body: content,
       XiaomiActivity: xiaomiActivity,
       AndroidExtParameters: JSON.stringify(payload),
-      StoreOffLine: true,
+      StoreOffline: true,
       ExpireTime: expireTime,
       Timestamp: timeStamp,
       SignatureNonce: uniqId()
