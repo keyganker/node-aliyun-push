@@ -115,14 +115,23 @@ class AliYunPush {
         form: params
       }, (err, message, body) => {
         if (err) {
-          reject(err);
+          reject(_.extend(err, {
+            data: {
+              deviceTokens: targetValue,
+              message: content
+            }
+          }));
           return;
         }
         if (!body) {
           reject(new ClientError({
             title: 'Call aliyun push error.',
             statusCode: message.statusCode,
-            statusMessage: message.statusMessage
+            statusMessage: message.statusMessage,
+            data: {
+              deviceTokens: targetValue,
+              message: content
+            }
           }));
           return;
         }

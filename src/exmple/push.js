@@ -2,21 +2,21 @@ import AliPush from '../index';
 
 const aliPush = new AliPush({
   baseUrl: 'http://cloudpush.aliyuncs.com',
-  accessKeyId: 'LTAIv4YM8TX617tc',
-  accessKeySecret: 'bW0NGYa56iLvxgAwsxIOfwKA6WmhaI',
+  accessKeyId: 'xxx',
+  accessKeySecret: 'xxx',
   signatureMethod: 'HMAC-SHA1',
   format: 'JSON',
   regionId: 'cn-hangzhou',
   signatureVersion: '1.0',
   version: '2015-08-27',
-  appKey: '23478581',
-  proxy: 'http://10.21.212.60:3128'
+  appKey: 'xxx',
+  proxy: 'xxx'
 });
 
 for (let i = 0; i < 2; i++) {
   aliPush.push({
     target: 'device',
-    targetValue: '6379df9d555d4edb90a21f1a00a042a4',
+    targetValue: 'xxx',
     type: 1,
     deviceType: 1,
     title: '财富派',
