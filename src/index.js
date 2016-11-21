@@ -141,7 +141,11 @@ class AliYunPush {
           reject(new ClientError({
             title: 'Call aliyun push error.',
             statusCode: ERROR_NULL_RESPONSE,
-            statusMessage: 'response body is null'
+            statusMessage: 'response body is null',
+            data: {
+              deviceTokens: targetValue,
+              message: content
+            }
           }));
         }
 
