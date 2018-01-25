@@ -15,6 +15,7 @@ const ClientError = new TypedError({
 
 const ERROR_NULL_RESPONSE = 601;
 const ERROR_PARAMATERS = 602;
+const ERROR_FAIL_RESPONSE = 603;
 
 class AliYunPush {
   constructor({
@@ -147,7 +148,17 @@ class AliYunPush {
               message: content
             }
           }));
-        }
+        } else if (!data.ResponseId) {
+            reject(new ClientError({
+              title: 'Call aliyun push error.',
+              statusCode: ERROR_FAIL_RESPONSE,
+              statusMessage: data.Message,
+              data: {
+                deviceTokens: targetValue,
+                message: content
+              }
+            }));
+          }
 
         data = _.extend(data, {
           deviceTokens: targetValue,
